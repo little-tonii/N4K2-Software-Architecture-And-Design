@@ -9,22 +9,22 @@ from .service import create_customer_task, delete_customer_task, get_customer_ta
 router = APIRouter(prefix="/customer", tags=["Customer"])
 
 @router.post("/create", status_code=status.HTTP_201_CREATED, response_model=CreateCustomerResponse)
-async def create_customer(session: Annotated[Session, Depends(get_db)], request: CreateCustomerRequest):
+def create_customer(session: Annotated[Session, Depends(get_db)], request: CreateCustomerRequest):
     return create_customer_task(
         email=request.email, 
         hashed_password=request.hashed_password, 
         session=session)
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=GetCustomerResponse)
-async def get_customer(session: Annotated[Session, Depends(get_db)], id: int):
+def get_customer(session: Annotated[Session, Depends(get_db)], id: int):
      return get_customer_task(session, id)
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_customer(session: Annotated[Session, Depends(get_db)], id: int):
+def delete_customer(session: Annotated[Session, Depends(get_db)], id: int):
     return delete_customer_task(session, id)
 
 @router.patch("/update/{id}", status_code=status.HTTP_200_OK, response_model=UpdateCustomerResponse)
-async def update_customer(session: Annotated[Session, Depends(get_db)], id: int, request: UpdateCustomerRequest):
+def update_customer(session: Annotated[Session, Depends(get_db)], id: int, request: UpdateCustomerRequest):
     return update_customer_task(
         session=session, 
         customer_id=id, 
