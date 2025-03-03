@@ -2,17 +2,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
-from .database import Base, engine
-from . import urls
 
-from .exception_handler import global_exception_handler, http_exception_handler, validation_exception_handler
+from .apis import customer_api
+from .configs.exception_handler import global_exception_handler, http_exception_handler, validation_exception_handler
 
-app = FastAPI()
-
-Base.metadata.create_all(bind=engine)
+app = FastAPI(
+    title="Django Ecommerce"
+)
 
 origins = [
-    "http://gateway:8000"
+    "*"
 ]
 
 app.add_middleware(
@@ -23,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-app.include_router(urls.router)
+app.include_router(customer_api.router)
 
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(ValidationError, validation_exception_handler)

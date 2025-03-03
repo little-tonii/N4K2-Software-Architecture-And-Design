@@ -18,7 +18,7 @@ def create_customer_task(session: Session, email: str, hashed_password: str) -> 
         updated_at=new_customer.updated_at
     )
 
-def get_customer_task(session: Session, customer_id: int) -> GetCustomerResponse:
+def get_customer_by_id_task(session: Session, customer_id: int) -> GetCustomerResponse:
     customer = session.get(Customer, customer_id)
     if not customer:
         raise HTTPException(status_code=404, detail="Khách hàng không tồn tại")
@@ -48,6 +48,19 @@ def update_customer_task(session: Session, customer_id: int, phone_number: str |
     session.commit()
     session.refresh(customer)
     return UpdateCustomerResponse(
+        id=customer.id,
+        email=customer.email,
+        phone_number=customer.phone_number,
+        address=customer.address,
+        created_at=customer.created_at,
+        updated_at=customer.updated_at
+    )
+    
+def get_customer_by_email_task(session: Session, email: str) -> GetCustomerResponse:
+    customer = session.query(Customer).filter(Customer.email == email).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Khách hàng không tồn tại")
+    return GetCustomerResponse(
         id=customer.id,
         email=customer.email,
         phone_number=customer.phone_number,
