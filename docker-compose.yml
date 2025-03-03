@@ -38,17 +38,17 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   customer_service:
-    build: ./customer_service
+    build: ./customer-service
     container_name: customer_service_container
     restart: always
     ports:
       - "10004:8000"
     depends_on:
       - mysql_db
-    volumes:
-      - ./customer_service:/app
     environment:
       DATABASE_URL: mysql+pymysql://user:123456@mysql_db:3306/customer_db
+    volumes:
+      - ./customer-service:/app
 
 volumes:
   mysql_data:

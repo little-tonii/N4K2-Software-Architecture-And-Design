@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 from starlette import status
 
-from schemas import ErrorResponse, ErrorsResponse
+from .schemas import ErrorResponse, ErrorsResponse
 
 async def http_exception_handler(request: Request, exc: HTTPException):
     message = exc.detail

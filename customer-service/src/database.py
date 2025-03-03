@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from variables import DATABASE_URL
+from .variables import DATABASE_URL
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 engine = create_engine(DATABASE_URL)
