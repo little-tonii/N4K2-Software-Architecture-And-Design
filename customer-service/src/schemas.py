@@ -27,7 +27,17 @@ class GetCustomerResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     
+class GetCustomerByEmailResponse(BaseModel):
+    id: int
+    email: str
+    hashed_password: str
+    phone_number: str | None
+    address: str | None
+    created_at: datetime
+    updated_at: datetime
+    
 class UpdateCustomerRequest(BaseModel):
+    refresh_token: Optional[str] = None
     hashed_password: Optional[str] = None
     phone_number: Optional[str] = None
     address: Optional[str] = None

@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from starlette import status
-from .schemas import CreateCustomerRequest, CreateCustomerResponse, GetCustomerResponse, UpdateCustomerRequest, UpdateCustomerResponse
+from .schemas import CreateCustomerRequest, CreateCustomerResponse, GetCustomerByEmailResponse, GetCustomerResponse, UpdateCustomerRequest, UpdateCustomerResponse
 from sqlalchemy.orm import Session
 from .database import get_db
 from .service import create_customer_task, delete_customer_task, get_customer_by_email_task, get_customer_by_id_task, update_customer_task
@@ -26,12 +26,13 @@ def delete_customer(session: Annotated[Session, Depends(get_db)], id: int):
 @router.patch("/update/{id}", status_code=status.HTTP_200_OK, response_model=UpdateCustomerResponse)
 def update_customer(session: Annotated[Session, Depends(get_db)], id: int, request: UpdateCustomerRequest):
     return update_customer_task(
+        refresh_token=request.refresh_token,
         session=session, 
         customer_id=id, 
         hashed_password=request.hashed_password, 
         phone_number=request.phone_number, 
         address=request.address)
 
-@router.get("/email/{email}", status_code=status.HTTP_200_OK, response_model=GetCustomerResponse)
+@router.get("/email/{email}", status_code=status.HTTP_200_OK, response_model=GetCustomerByEmailResponse)
 def get_customer_by_email(session: Annotated[Session, Depends(get_db)], email: str):
     return get_customer_by_email_task(session=session, email=email)
