@@ -14,6 +14,33 @@ bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 class CustomerService:
     
     @staticmethod
+    async def update_customer_infor(id: int, phone_number: str | None, address: str | None) -> CustomerInforResponse:
+        data = {}
+        if phone_number is not None:
+            data["phone_number"] = phone_number
+        if address is not None:
+            data["address"] = address
+        if not data:
+            raise HTTPException(status_code=400, detail="Vui lòng nhập thông tin cần cập nhật")
+        async with httpx.AsyncClient() as client:
+            response = await client.patch(
+                f"{CUSTOMER_SERVICE_URL}/update/{id}",
+                json=data
+            )
+            if response.status_code == 404:
+                raise HTTPException(status_code=404, detail="Khách hàng không tồn tại")
+            if response.status_code != 200:
+                raise HTTPException(status_code=500, detail="Có lỗi xảy ra với customer service")
+            return CustomerInforResponse(
+                id=response.json().get("id"),
+                email=response.json().get("email"),
+                phone_number=response.json().get("phone_number"),
+                address=response.json().get("address"),
+                created_at=response.json().get("created_at"),
+                updated_at=response.json().get("updated_at")
+            )
+
+    @staticmethod
     async def infor_customer(id: int) -> CustomerInforResponse:
         async with httpx.AsyncClient() as client:
             response = await client.get(f"{CUSTOMER_SERVICE_URL}/id/{id}")
