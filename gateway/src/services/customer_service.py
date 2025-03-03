@@ -1,20 +1,34 @@
-from fastapi import Response
-
-from typing import Annotated
-from fastapi import Depends, HTTPException
+from fastapi import HTTPException
 import httpx
 from passlib.context import CryptContext
 from starlette import status
 
 from ..utils.token_util import create_access_token, create_refresh_token
 
-from ..schemas.response.customer_schema_response import CustomerLoginResponse, CustomerRegisterResponse
+from ..schemas.response.customer_schema_response import CustomerInforResponse, CustomerLoginResponse, CustomerRegisterResponse
 
 from ..configs.variables import CUSTOMER_SERVICE_URL
 
 bcrypt_context = CryptContext(schemes=['bcrypt'], deprecated='auto')
 
 class CustomerService:
+    
+    @staticmethod
+    async def infor_customer(id: int) -> CustomerInforResponse:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"{CUSTOMER_SERVICE_URL}/id/{id}")
+            if response.status_code == status.HTTP_404_NOT_FOUND:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Khách hàng không tồn tại")
+            if response.status_code != status.HTTP_200_OK:
+                raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Có lỗi xảy ra với customer service")
+            return CustomerInforResponse(
+                id=response.json().get("id"),
+                email=response.json().get("email"),
+                phone_number=response.json().get("phone_number"),
+                address=response.json().get("address"),
+                created_at=response.json().get("created_at"),
+                updated_at=response.json().get("updated_at")
+            )
     
     @staticmethod
     async def login_customer(email: str, password: str) -> CustomerLoginResponse:

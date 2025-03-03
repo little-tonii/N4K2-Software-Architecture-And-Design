@@ -7,7 +7,7 @@ from .apis import customer_api
 from .configs.exception_handler import global_exception_handler, http_exception_handler, validation_exception_handler
 
 app = FastAPI(
-    title="Django Ecommerce"
+    title="Django Ecommerce RestfulAPI"
 )
 
 origins = [
