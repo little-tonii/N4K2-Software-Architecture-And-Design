@@ -24,6 +24,7 @@ class GetCustomerResponse(BaseModel):
     email: str
     phone_number: str | None
     address: str | None
+    account_type: str
     created_at: datetime
     updated_at: datetime
     
@@ -32,6 +33,7 @@ class GetCustomerByEmailResponse(BaseModel):
     email: str
     hashed_password: str
     phone_number: str | None
+    account_type: str
     address: str | None
     created_at: datetime
     updated_at: datetime
@@ -46,6 +48,7 @@ class UpdateCustomerResponse(BaseModel):
     id: int
     email: str
     phone_number: str | None
+    account_type: str
     address: str | None
     created_at: datetime
     updated_at: datetime

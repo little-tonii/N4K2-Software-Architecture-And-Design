@@ -17,6 +17,7 @@ class CustomerInforResponse(BaseModel):
     id: int
     email: str
     phone_number: str | None
+    account_type: str
     address: str | None
     created_at: datetime
     updated_at: datetime

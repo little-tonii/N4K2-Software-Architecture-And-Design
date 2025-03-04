@@ -37,7 +37,8 @@ class CustomerService:
                 phone_number=response.json().get("phone_number"),
                 address=response.json().get("address"),
                 created_at=response.json().get("created_at"),
-                updated_at=response.json().get("updated_at")
+                updated_at=response.json().get("updated_at"),
+                account_type=response.json().get("account_type")
             )
 
     @staticmethod
@@ -54,7 +55,8 @@ class CustomerService:
                 phone_number=response.json().get("phone_number"),
                 address=response.json().get("address"),
                 created_at=response.json().get("created_at"),
-                updated_at=response.json().get("updated_at")
+                updated_at=response.json().get("updated_at"),
+                account_type=response.json().get("account_type")
             )
     
     @staticmethod

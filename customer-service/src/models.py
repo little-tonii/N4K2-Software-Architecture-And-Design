@@ -12,3 +12,4 @@ class Customer(Base):
     address: str = Column(String(500), nullable=True)
     created_at = Column(DateTime, default=func.now(), nullable=False)
     updated_at = Column(DateTime, default=func.now(), onupdate=func.now(), nullable=False)
+    account_type: str = Column(String(20), nullable=False, default="USER")

@@ -28,7 +28,8 @@ def get_customer_by_id_task(session: Session, customer_id: int) -> GetCustomerRe
         phone_number=customer.phone_number,
         address=customer.address,
         created_at=customer.created_at,
-        updated_at=customer.updated_at
+        updated_at=customer.updated_at,
+        account_type=customer.account_type
     )
 
 def delete_customer_task(session: Session, customer_id: int) -> None:
@@ -54,7 +55,8 @@ def update_customer_task(session: Session, refresh_token: str | None, customer_i
         phone_number=customer.phone_number,
         address=customer.address,
         created_at=customer.created_at,
-        updated_at=customer.updated_at
+        updated_at=customer.updated_at,
+        account_type=customer.account_type
     )
     
 def get_customer_by_email_task(session: Session, email: str) -> GetCustomerByEmailResponse:
@@ -68,5 +70,6 @@ def get_customer_by_email_task(session: Session, email: str) -> GetCustomerByEma
         phone_number=customer.phone_number,
         address=customer.address,
         created_at=customer.created_at,
-        updated_at=customer.updated_at
+        updated_at=customer.updated_at,
+        account_type=customer.account_type
     )
