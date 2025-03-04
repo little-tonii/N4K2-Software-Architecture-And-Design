@@ -12,6 +12,11 @@ services:
       - "10001:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uuser", "-p123456"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
   mongo_db:
     image: mongo:latest
@@ -23,6 +28,11 @@ services:
       - mongo_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: items_db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh --quiet
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
   postgres_db:
     image: postgres:latest
@@ -36,6 +46,11 @@ services:
       - "10003:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d orders_db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
 
   customer_service:
     build: ./customer-service
@@ -44,7 +59,8 @@ services:
     ports:
       - "10004:8000"
     depends_on:
-      - mysql_db
+      mysql_db:
+        condition: service_healthy
     environment:
       DATABASE_URL: mysql+pymysql://user:123456@mysql_db:3306/customer_db
     volumes:
