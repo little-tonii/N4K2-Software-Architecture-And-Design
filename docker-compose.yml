@@ -66,14 +66,28 @@ services:
     volumes:
       - ./customer-service:/app
 
+  product_service:
+    build: ./product-service
+    container_name: product_service_container
+    restart: always
+    ports:
+      - "10005:8000"
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mongodb://mongo_db:27017/items_db
+    volumes:
+      - ./product-service:/app
+
   gateway:
     build: ./gateway
     container_name: gateway_container
     restart: always
     ports:
       - "8000:8000"
-    depends_on:
-      - customer_service
+    # depends_on:
+    #   - customer_service
     environment:
       SECRET_KEY: secret_key
       HASH_ALGORITHM: HS256
